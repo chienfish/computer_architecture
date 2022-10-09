@@ -1,3 +1,4 @@
+// 測資
 // add $t0, $t1, $t2
 // sub $t0, $t1, $t2
 // lw $t0, 32($s2)
@@ -67,8 +68,13 @@ $("#decode").click(function(){
                 source.push(item2);
             }else {
                 // 檢查destination
-                if (checkReg(item3)) destination = "Mem[" + item3 + "+" + item2 + "]";
-                else destination = `${item3}暫存器不存在`;
+                if (checkReg(item3)) {
+                    destination = "Mem[" + item3 + "+" + item2 + "]";
+                    source.push(item3);
+                }else {
+                    destination = `${item3}暫存器不存在`;
+                    source.push(`${item3}暫存器不存在`);
+                }
                 // 檢查source
                 if (checkReg(item1)) source.push(item1);
                 else source.push(`${item1}暫存器不存在`);
