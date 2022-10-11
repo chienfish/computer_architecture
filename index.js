@@ -31,11 +31,11 @@ function checkReg(item) {  // 檢查是否在register array裡
 
 function position(str, item) {
     if (checkReg(item)) {
-        if (item == str[1].replace(",", ""))    destination = item;
+        if (item == str[1])    destination = item;
         else    source.push(item);
     }else {
-        if (item == str[1].replace(",", ""))    destination = `${item}指令不存在`;
-        else    source.push(`${item}指令不存在`);
+        if (item == str[1])    destination = `${item}暫存器不存在`;
+        else    source.push(`${item}暫存器不存在`);
     }
 }
 
@@ -43,25 +43,29 @@ function clean() {
     $("#ins").html("");
     $("#source").html("");
     $("#des").html("");
+    destination = "";
     source.length = 0; // 清空陣列
 }
 
 $("#decode").click(function(){
     var MIPS = $("#MIPS").val();
     var str = MIPS.split(' ');
-    var ins = str[0];
+    var ins = str[0].toLowerCase();     // 大小寫都可以被判斷
     clean();
+
+    for (let i = 0; i < str.length; i++)    //將逗號(,)都先清掉
+        str[i] = str[i].replace(",", "");
 
     if (checkIns(ins)) {  //檢查指令存在？
         // 先判斷是運算類(add, sub)還是記憶體類(sw, lw) -> 記憶體類再分load(lw)和store(sw)
         if (ins == "add" || ins == "sub") {
-            var item1 = str[1].replace(",", ""), item2 = str[2].replace(",", ""), item3 = str[3].replace(",", "");
+            var item1 = str[1], item2 = str[2], item3 = str[3];
             $("#source").html("");
             position(str, item1);
             position(str, item2); 
             position(str, item3);
         }else if (ins == "lw" || ins == "sw") {
-            var item1 = str[1].replace(",", ""), item2 = str[2].split("(")[0], item3 = str[2].match(/[^(][a-zA-Z0-9]+(?=\))/g)[0];
+            var item1 = str[1], item2 = str[2].split("(")[0], item3 = str[2].match(/[^(][a-zA-Z0-9]+(?=\))/g)[0];
             if (ins == "lw") {
                 position(str, item1);
                 position(str, item3);
